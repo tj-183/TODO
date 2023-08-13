@@ -3,14 +3,13 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Components/Footer/Footer.tsx';
 import Header from './Components/Header/Header.tsx';
 import './App.css';
+import LandingPage from './Components/LandingPage/LandingPage.tsx';
 
 const App = () => 
   (
     <BrowserRouter>
       <Header />
-      <Routes>
-        
-      </Routes>
+      <LandingPage />
       <Footer />
     </BrowserRouter>
   );
