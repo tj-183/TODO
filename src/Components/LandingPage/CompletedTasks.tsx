@@ -8,11 +8,19 @@ const CompletedBar = styled.div`
 const CompletedSpan = styled(Row)`
     text-align: center;
 `;
+
+const Heading = styled.h3`
+    display: flex;
+    justify-content: center;
+`;
+
 const CompletedTasks = (props) => {
     return (
         <>
-            {props.tasks.map((task, index) => {
-                return task.isDone ? <></> : <CompletedSpan key={index}>{task.name}</CompletedSpan>
+        <Heading>Completed Tasks</Heading>
+
+            {props.tasks.map((task) => {
+                return !task.isDone ? <></> : <CompletedSpan key={task.id}>{task.name}</CompletedSpan>
             })}
         </>
     )

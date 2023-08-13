@@ -34,24 +34,57 @@ const client = new Client({
   });
 
 
-  app.get('/tasks', async (req, res) => {
+  app.get('/tasks/:boardId', async (req, res) => {
 
-    const response = await client.query('SELECT * FROM public.tasks where "isDeleted"=false');
-
-    // console.log(JSON.stringify(response.rows));
-    res.send(response.rows)
+    const boardId = req.params.boardId;
+    try {
+      const response = await client.query(`SELECT * FROM public.tasks WHERE public.tasks."boardId" = ${boardId} and public.tasks."isDeleted" = false;`);
+      response.status = 200;
+      res.send(response);
+    }
+    catch (error) {
+      error.status = 400;
+      res.send(error);
+    }
   });
 
   app.get('/boards', async (req, res) => {
     const response = await client.query('SELECT * FROM public.boards where "isDeleted"=false');
-    // console.log(JSON.stringify(response.rows));
+
     res.send(response.rows)
+  });
+
+  app.post('/add/task', async (req, res) => {
+
+    try {
+      const body = req.body;
+      const query = `INSERT INTO public.tasks("boardId", name, description) VALUES (${body.boardId}, '${body.name}', '${body.description}');`
+      const response = await client.query(query);
+      response.status = 200;
+      console.log(response);
+      res.send(response);
+    }
+    catch (error) {
+      error.status = 400;
+      res.send(error);
+    }
   });
 
   app.put('/delete/board/:boardId', async (req, res) => {
     const response = await client.query(`UPDATE public.boards SET "isDeleted"=true WHERE id=${req.body.id};`);
     res.json(response)
-  })
+  });
+
+  app.put('/delete/task/:taskId', async (req, res) => {
+    const response = await client.query(`UPDATE public.tasks SET "isDeleted"=true WHERE id=${req.body.id};`);
+    res.json(response)
+  });
+
+  app.put('/complete/task/:taskId', async (req, res) => {
+    const response = await client.query(`UPDATE public.tasks SET "isDone"=true WHERE id=${req.body.id}`);
+    res.json(response)
+  });
+
 // start express server on port 5000
 app.listen(5000, () => {
   console.log("server started on port 5000");
