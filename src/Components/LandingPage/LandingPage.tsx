@@ -52,10 +52,6 @@ const LandingPage = () => {
           }
       )
       .then(response => {
-          
-          
-          
-
           if (response.status===200) {
               getBoards();
           }
